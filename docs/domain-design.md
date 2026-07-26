@@ -9,7 +9,7 @@
 | **Promociones** | Cupones y reglas de descuento | Promotion |
 | **Checkout** ✅ | Proceso de orden y coordinación de flujos | Order |
 | **Pagos** | Procesamiento de pagos (Event Sourcing) | Payment |
-| **Envíos** | Gestión de envíos y tracking | Shipment |
+| **Envíos** ✅ | Gestión de envíos y tracking | Shipment |
 | **Devoluciones** | Gestión de devoluciones (Event Sourcing) | Return |
 
 ## 2. Context Map

@@ -153,11 +153,17 @@ CREATE INDEX idx_payment_events_aggregate ON payment_events(aggregate_id);
 CREATE TABLE shipments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_id UUID NOT NULL UNIQUE,
-    tracking_number VARCHAR(100) UNIQUE NOT NULL,
-    status VARCHAR(50) NOT NULL, -- CREATED, IN_TRANSIT, DELIVERED, FAILED
-    address VARCHAR(255) NOT NULL,
+    tracking_number VARCHAR(30) UNIQUE NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(100),
+    postal_code VARCHAR(20) NOT NULL,
+    country VARCHAR(2) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'CREATED', -- CREATED, IN_TRANSIT, DELIVERED, FAILED
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    shipped_at TIMESTAMP WITH TIME ZONE,
+    delivered_at TIMESTAMP WITH TIME ZONE
 );
 
 -- -----------------------------------------------------------------------------

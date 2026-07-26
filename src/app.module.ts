@@ -12,6 +12,7 @@ import { CarritoModule } from './contexts/carrito/carrito.module';
 import { PromocionesModule } from './contexts/promociones/promociones.module';
 import { CheckoutModule } from './contexts/checkout/checkout.module';
 import { PagosModule } from './contexts/pagos/pagos.module';
+import { EnviosModule } from './contexts/envios/envios.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PagosModule } from './contexts/pagos/pagos.module';
     PromocionesModule,
     CheckoutModule,
     PagosModule,
+    EnviosModule,
   ],
   controllers: [HealthController],
 })

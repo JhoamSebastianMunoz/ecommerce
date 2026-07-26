@@ -10,7 +10,8 @@ import { OutboxService } from './infrastructure/outbox/OutboxService';
 import { PagosModule } from '../pagos/pagos.module';
 import { PaymentPortAdapter } from '../pagos/infrastructure/adapters/PaymentPortAdapter';
 import { CatalogoModule } from '../catalogo/catalogo.module';
-import { ShipmentPortStub } from './infrastructure/repository/ShipmentPortStub';
+import { EnviosModule } from '../envios/envios.module';
+import { ShipmentPortAdapter } from '../envios/infrastructure/adapters/ShipmentPortAdapter';
 
 import { CreateOrderUseCase } from './application/ports/in/CreateOrderUseCase';
 import { GetOrderQuery } from './application/ports/in/GetOrderQuery';
@@ -30,6 +31,7 @@ import { ProductStockAdapter } from '../catalogo/infrastructure/adapters/Product
     TypeOrmModule.forFeature([OrderEntity, OrderItemEntity]),
     PagosModule,
     CatalogoModule,
+    EnviosModule,
   ],
   controllers: [CheckoutController],
   providers: [
@@ -40,7 +42,7 @@ import { ProductStockAdapter } from '../catalogo/infrastructure/adapters/Product
     { provide: OrderRepository, useClass: TypeOrmOrderRepository },
     { provide: ProductStockPort, useClass: ProductStockAdapter },
     { provide: PaymentPort, useClass: PaymentPortAdapter },
-    { provide: ShipmentPort, useClass: ShipmentPortStub },
+    { provide: ShipmentPort, useClass: ShipmentPortAdapter },
     { provide: CreateOrderUseCase, useClass: CreateOrderUseCaseImpl },
     { provide: GetOrderQuery, useClass: GetOrderQueryImpl },
   ],
