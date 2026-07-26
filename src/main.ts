@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
-import { validateEnv } from './config/configuration';
 
 async function bootstrap(): Promise<void> {
-  validateEnv();
-
   const app = await NestFactory.create(AppModule);
+
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('server.port', 3000);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -22,9 +23,7 @@ async function bootstrap(): Promise<void> {
 
   const config = new DocumentBuilder()
     .setTitle('E-commerce Backend API')
-    .setDescription(
-      'E-commerce backend built with DDD + Hexagonal Architecture',
-    )
+    .setDescription('E-commerce backend built with DDD + Hexagonal Architecture')
     .setVersion('1.0')
     .addTag('Health')
     .addTag('Catálogo')
@@ -57,12 +56,9 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = process.env.PORT ?? 3000;
   await app.listen(port);
   console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(
-    `📚 Swagger docs available at: http://localhost:${port}/api/docs`,
-  );
+  console.log(`📚 Swagger docs available at: http://localhost:${port}/api/docs`);
 }
 
 void bootstrap();

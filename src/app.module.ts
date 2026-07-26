@@ -5,18 +5,21 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './shared-kernel/infrastructure/health/health.controller';
 import { CorrelationIdMiddleware } from './shared-kernel/infrastructure/middleware/correlation-id.middleware';
-import { loadConfiguration, validateEnv } from './config/configuration';
+import { loadConfiguration } from './config/configuration';
 import { typeOrmConfig } from './database/data-source';
-
-validateEnv();
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env', '.env.local'],
       load: [loadConfiguration],
     }),
-    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [],
+      useFactory: () => typeOrmConfig,
+    }),
     EventEmitterModule.forRoot({
       wildcard: false,
     }),

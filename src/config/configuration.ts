@@ -19,13 +19,7 @@ export interface AppConfig {
 }
 
 export const validateEnv = (): void => {
-  const required = [
-    'DB_HOST',
-    'DB_PORT',
-    'DB_USERNAME',
-    'DB_PASSWORD',
-    'DB_NAME',
-  ];
+  const required = ['DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME'];
 
   const missing = required.filter((key) => !process.env[key]);
   if (missing.length > 0) {
