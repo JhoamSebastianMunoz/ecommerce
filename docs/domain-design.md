@@ -40,6 +40,14 @@ Ver: `docs/adr/0002-fusion-catalogo-productos-inventario.md`
 
 **Justificación:** El flujo de checkout implica múltiples contextos (Catálogo, Pagos, Envíos) con necesidad de compensación ante fallos. Una saga orquestada con un coordinador explícito (`CheckoutSaga`) proporciona visibilidad, control de timeouts y compensaciones ordenadas.
 
+### 3.4 Money como Value Object compartido
+
+**Justificación:** `Money` es un concepto de dominio usado por múltiples BCs (Catálogo y Carrito). Se movió a `shared-kernel` para evitar dependencias cruzadas entre BCs, manteniendo consistencia en cálculos monetarios.
+
+### 3.5 Puerto ACL ProductQueryPort
+
+**Justificación:** Carrito necesita validar stock y precios del Catálogo sin crear dependencia directa. Se definió `ProductQueryPort` en Carrito y `ProductQueryAdapter` en Catálogo, siguiendo el patrón Anti-Corruption Layer.
+
 ## 4. Eventos de Dominio
 
 ### Catálogo

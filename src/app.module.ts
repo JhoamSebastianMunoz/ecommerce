@@ -8,6 +8,7 @@ import { CorrelationIdMiddleware } from './shared-kernel/infrastructure/middlewa
 import { loadConfiguration } from './config/configuration';
 import { typeOrmConfig } from './database/data-source';
 import { CatalogoModule } from './contexts/catalogo/catalogo.module';
+import { CarritoModule } from './contexts/carrito/carrito.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CatalogoModule } from './contexts/catalogo/catalogo.module';
     }),
     TerminusModule,
     CatalogoModule,
+    CarritoModule,
   ],
   controllers: [HealthController],
 })
