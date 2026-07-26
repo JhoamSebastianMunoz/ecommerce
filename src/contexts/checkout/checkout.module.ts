@@ -7,7 +7,9 @@ import { OrderEntity } from './infrastructure/db/entities/OrderEntity';
 import { OrderItemEntity } from './infrastructure/db/entities/OrderItemEntity';
 import { CheckoutEventPublisher } from './infrastructure/events/CheckoutEventPublisher';
 import { OutboxService } from './infrastructure/outbox/OutboxService';
-import { PaymentPortStub } from './infrastructure/repository/PaymentPortStub';
+import { PagosModule } from '../pagos/pagos.module';
+import { PaymentPortAdapter } from '../pagos/infrastructure/adapters/PaymentPortAdapter';
+import { CatalogoModule } from '../catalogo/catalogo.module';
 import { ShipmentPortStub } from './infrastructure/repository/ShipmentPortStub';
 
 import { CreateOrderUseCase } from './application/ports/in/CreateOrderUseCase';
@@ -26,6 +28,8 @@ import { ProductStockAdapter } from '../catalogo/infrastructure/adapters/Product
 @Module({
   imports: [
     TypeOrmModule.forFeature([OrderEntity, OrderItemEntity]),
+    PagosModule,
+    CatalogoModule,
   ],
   controllers: [CheckoutController],
   providers: [
@@ -35,7 +39,7 @@ import { ProductStockAdapter } from '../catalogo/infrastructure/adapters/Product
     CheckoutSaga,
     { provide: OrderRepository, useClass: TypeOrmOrderRepository },
     { provide: ProductStockPort, useClass: ProductStockAdapter },
-    { provide: PaymentPort, useClass: PaymentPortStub },
+    { provide: PaymentPort, useClass: PaymentPortAdapter },
     { provide: ShipmentPort, useClass: ShipmentPortStub },
     { provide: CreateOrderUseCase, useClass: CreateOrderUseCaseImpl },
     { provide: GetOrderQuery, useClass: GetOrderQueryImpl },
