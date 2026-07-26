@@ -10,7 +10,7 @@
 | **Checkout** ✅ | Proceso de orden y coordinación de flujos | Order |
 | **Pagos** | Procesamiento de pagos (Event Sourcing) | Payment |
 | **Envíos** ✅ | Gestión de envíos y tracking | Shipment |
-| **Devoluciones** | Gestión de devoluciones (Event Sourcing) | Return |
+| **Devoluciones** ✅ | Gestión de devoluciones (Event Sourcing) | Return |
 
 ## 2. Context Map
 
@@ -21,7 +21,7 @@ Carrito <--(command)--> Checkout
 Checkout -->(saga)--> Catálogo (reservar stock)
 Checkout -->(saga)--> Pagos (procesar pago)
 Checkout -->(saga)--> Envíos (crear envío)
-Devoluciones -->(command)--> Pagos (reembolsar)
+Devoluciones -->(ACL)--> Pagos (reembolsar vía PaymentRefundAdapter)
 ```
 
 ## 3. Decisiones de Diseño
