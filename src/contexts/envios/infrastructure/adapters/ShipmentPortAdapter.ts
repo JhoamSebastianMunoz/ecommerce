@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ShipmentPort, ShipmentResult } from '../../../checkout/application/ports/out/ShipmentPort';
+import { ShipmentPort, ShipmentResult, ShipmentAddress } from '../../../checkout/application/ports/out/ShipmentPort';
 import { CreateShipmentUseCase } from '../../application/ports/in/shipment.ports.in';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class ShipmentPortAdapter extends ShipmentPort {
   async createShipment(
     orderId: string,
     items: Array<{ productId: string; quantity: number }>,
-    address: { street: string; city: string },
+    address: ShipmentAddress,
     correlationId?: string,
   ): Promise<ShipmentResult> {
     try {
@@ -30,8 +30,9 @@ export class ShipmentPortAdapter extends ShipmentPort {
           address: {
             street: address.street,
             city: address.city,
-            postalCode: 'N/A',
-            country: 'US',
+            state: address.state,
+            postalCode: address.postalCode,
+            country: address.country,
           },
         },
         correlationId,

@@ -7,6 +7,9 @@ export interface OrderItemInput {
 export interface ShippingAddressInput {
   street: string;
   city: string;
+  state?: string;
+  postalCode: string;
+  country: string;
 }
 
 export class CreateOrderDto {
@@ -16,5 +19,6 @@ export class CreateOrderDto {
     public readonly shippingAddress: ShippingAddressInput,
     public readonly discountAmount?: number,
     public readonly idempotencyKey?: string,
+    public readonly cartId?: string,
   ) {}
 }

@@ -105,18 +105,22 @@ CREATE TABLE promotions (
 );
 
 -- -----------------------------------------------------------------------------
--- 5. BOUNDED CONTEXT: CHECKOUT & ORDENES
+-- 5. BOUNDED CONTEXT: CHECKOUT & ÓRDENES
 -- -----------------------------------------------------------------------------
 
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     customer_id VARCHAR(100) NOT NULL,
+    cart_id UUID REFERENCES carts(id) ON DELETE SET NULL,
     idempotency_key VARCHAR(100) UNIQUE,
     status VARCHAR(50) NOT NULL, -- PENDING, STOCK_RESERVED, PAYMENT_PENDING, CONFIRMED, FAILED, CANCELLED
     total_amount DECIMAL(12, 2) NOT NULL,
     discount_amount DECIMAL(12, 2) DEFAULT 0.00,
     shipping_street VARCHAR(255) NOT NULL,
     shipping_city VARCHAR(100) NOT NULL,
+    shipping_state VARCHAR(100),
+    shipping_postal_code VARCHAR(20) NOT NULL,
+    shipping_country VARCHAR(2) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -124,7 +128,7 @@ CREATE TABLE orders (
 CREATE TABLE order_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    product_id UUID NOT NULL,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
     quantity INT NOT NULL,
     unit_price DECIMAL(12, 2) NOT NULL
 );
@@ -145,6 +149,7 @@ CREATE TABLE payment_events (
 );
 
 CREATE INDEX idx_payment_events_aggregate ON payment_events(aggregate_id);
+CREATE INDEX idx_payment_events_correlation ON payment_events ((metadata->>'correlationId'));
 
 -- -----------------------------------------------------------------------------
 -- 7. BOUNDED CONTEXT: ENVÍOS
@@ -159,7 +164,7 @@ CREATE TABLE shipments (
     state VARCHAR(100),
     postal_code VARCHAR(20) NOT NULL,
     country VARCHAR(2) NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'CREATED', -- CREATED, IN_TRANSIT, DELIVERED, FAILED
+    status VARCHAR(20) NOT NULL DEFAULT 'CREATED' CHECK (status IN ('CREATED','IN_TRANSIT','DELIVERED','FAILED')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     shipped_at TIMESTAMP WITH TIME ZONE,
@@ -182,3 +187,4 @@ CREATE TABLE return_events (
 );
 
 CREATE INDEX idx_return_events_aggregate ON return_events(aggregate_id);
+CREATE INDEX idx_return_events_correlation ON return_events ((metadata->>'correlationId'));

@@ -39,6 +39,21 @@ export class ShippingAddressRequestDto {
   @IsString()
   @IsNotEmpty()
   city!: string;
+
+  @ApiPropertyOptional({ example: 'NY', description: 'State or province' })
+  @IsString()
+  @IsOptional()
+  state?: string;
+
+  @ApiProperty({ example: '10001', description: 'Postal/ZIP code' })
+  @IsString()
+  @IsNotEmpty()
+  postalCode!: string;
+
+  @ApiProperty({ example: 'US', description: 'Country code (ISO 3166-1 alpha-2)' })
+  @IsString()
+  @IsNotEmpty()
+  country!: string;
 }
 
 export class CreateOrderRequestDto {
@@ -72,4 +87,12 @@ export class CreateOrderRequestDto {
   @IsString()
   @IsOptional()
   idempotencyKey?: string;
+
+  @ApiPropertyOptional({
+    example: '11111111-2222-3333-4444-555555555555',
+    description: 'Cart ID (optional, for traceability)',
+  })
+  @IsUUID()
+  @IsOptional()
+  cartId?: string;
 }

@@ -49,8 +49,8 @@ ON CONFLICT (id) DO NOTHING;
 -- 4. BOUNDED CONTEXT: CHECKOUT & ÓRDENES
 -- -----------------------------------------------------------------------------
 
-INSERT INTO orders (id, customer_id, idempotency_key, status, total_amount, discount_amount, shipping_street, shipping_city) VALUES 
-('99999999-8888-7777-6666-555555555555', 'CUST-USR-001', 'IK-ORDER-INIT-001', 'CONFIRMED', 1559.97, 0.00, 'Calle 100 #15-20', 'Bogotá')
+INSERT INTO orders (id, customer_id, cart_id, idempotency_key, status, total_amount, discount_amount, shipping_street, shipping_city, shipping_state, shipping_postal_code, shipping_country) VALUES 
+('99999999-8888-7777-6666-555555555555', 'CUST-USR-001', '11111111-2222-3333-4444-555555555555', 'IK-ORDER-INIT-001', 'CONFIRMED', 1559.97, 0.00, 'Calle 100 #15-20', 'Bogotá', 'Cundinamarca', '110111', 'CO')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO order_items (id, order_id, product_id, quantity, unit_price) VALUES 
@@ -63,8 +63,8 @@ ON CONFLICT (id) DO NOTHING;
 -- 5. BOUNDED CONTEXT: ENVÍOS
 -- -----------------------------------------------------------------------------
 
-INSERT INTO shipments (id, order_id, tracking_number, status, address) VALUES 
-('33333333-4444-5555-6666-777777777777', '99999999-8888-7777-6666-555555555555', 'TRK-2026-98765', 'IN_TRANSIT', 'Calle 100 #15-20, Bogotá')
+INSERT INTO shipments (id, order_id, tracking_number, street, city, state, postal_code, country, status, shipped_at) VALUES 
+('33333333-4444-5555-6666-777777777777', '99999999-8888-7777-6666-555555555555', 'TRK-2026-98765', 'Calle 100 #15-20', 'Bogotá', 'Cundinamarca', '110111', 'CO', 'IN_TRANSIT', NOW())
 ON CONFLICT (id) DO NOTHING;
 
 

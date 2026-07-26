@@ -40,6 +40,7 @@ export interface OrderProps {
   discountAmount: Money;
   shippingAddress: ShippingAddress;
   idempotencyKey?: string;
+  cartId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -54,6 +55,7 @@ export class Order extends AggregateRoot<string> {
     private _discountAmount: Money,
     public readonly shippingAddress: ShippingAddress,
     private _idempotencyKey?: string,
+    private _cartId?: string,
     private _createdAt: Date = new Date(),
     private _updatedAt: Date = new Date(),
   ) {
@@ -76,6 +78,10 @@ export class Order extends AggregateRoot<string> {
     return this._idempotencyKey;
   }
 
+  get cartId(): string | undefined {
+    return this._cartId;
+  }
+
   get createdAt(): Date {
     return this._createdAt;
   }
@@ -87,9 +93,10 @@ export class Order extends AggregateRoot<string> {
   static create(props: {
     customerId: string;
     items: OrderItemProps[];
-    shippingAddress: { street: string; city: string };
+    shippingAddress: { street: string; city: string; state?: string; postalCode: string; country: string };
     discountAmount?: number;
     idempotencyKey?: string;
+    cartId?: string;
   }): Order {
     if (!props.customerId) throw new Error('CustomerId is required');
     if (!props.items || props.items.length === 0) {
@@ -101,10 +108,13 @@ export class Order extends AggregateRoot<string> {
     const discount = Money.fromNumber(props.discountAmount ?? 0);
     const total = Money.fromNumber(rawTotal).subtract(discount);
 
-    const shipping = ShippingAddress.create(
-      props.shippingAddress.street,
-      props.shippingAddress.city,
-    );
+    const shipping = ShippingAddress.create({
+      street: props.shippingAddress.street,
+      city: props.shippingAddress.city,
+      state: props.shippingAddress.state,
+      postalCode: props.shippingAddress.postalCode,
+      country: props.shippingAddress.country,
+    });
 
     const order = new Order(
       OrderId.generate(),
@@ -115,6 +125,7 @@ export class Order extends AggregateRoot<string> {
       discount,
       shipping,
       props.idempotencyKey,
+      props.cartId,
     );
 
     order.addDomainEvent(
@@ -139,6 +150,7 @@ export class Order extends AggregateRoot<string> {
       props.discountAmount,
       props.shippingAddress,
       props.idempotencyKey,
+      props.cartId,
       props.createdAt,
       props.updatedAt,
     );

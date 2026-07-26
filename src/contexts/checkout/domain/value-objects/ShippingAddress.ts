@@ -1,32 +1,59 @@
 import { ValueObject } from '../../../../shared-kernel/domain/base/ValueObject';
 
-export class ShippingAddress extends ValueObject<string> {
+export class ShippingAddress extends ValueObject<ShippingAddress> {
   private constructor(
     public readonly street: string,
     public readonly city: string,
+    public readonly state: string | undefined,
+    public readonly postalCode: string,
+    public readonly country: string,
   ) {
     super();
   }
 
-  static create(street: string, city: string): ShippingAddress {
-    if (!street || street.trim().length === 0) {
+  static create(props: {
+    street: string;
+    city: string;
+    state?: string;
+    postalCode: string;
+    country: string;
+  }): ShippingAddress {
+    if (!props.street?.trim()) {
       throw new Error('Street must be a non-empty string');
     }
-    if (!city || city.trim().length === 0) {
+    if (!props.city?.trim()) {
       throw new Error('City must be a non-empty string');
     }
-    return new ShippingAddress(street.trim(), city.trim());
+    if (!props.postalCode?.trim()) {
+      throw new Error('Postal code must be a non-empty string');
+    }
+    if (!props.country?.trim()) {
+      throw new Error('Country must be a non-empty string');
+    }
+    return new ShippingAddress(
+      props.street.trim(),
+      props.city.trim(),
+      props.state?.trim(),
+      props.postalCode.trim(),
+      props.country.trim().toUpperCase(),
+    );
   }
 
-  equals(other: ValueObject<string>): boolean {
+  equals(other: ValueObject<ShippingAddress>): boolean {
     return (
       other instanceof ShippingAddress &&
       this.street === other.street &&
-      this.city === other.city
+      this.city === other.city &&
+      this.state === other.state &&
+      this.postalCode === other.postalCode &&
+      this.country === other.country
     );
   }
 
   toString(): string {
-    return `${this.street}, ${this.city}`;
+    const parts = [this.street, this.city];
+    if (this.state) parts.push(this.state);
+    parts.push(this.postalCode, this.country);
+    return parts.join(', ');
   }
 }

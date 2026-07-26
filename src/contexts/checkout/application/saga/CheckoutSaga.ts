@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OrderRepository } from '../ports/out/OrderRepository';
 import { ProductStockPort } from '../ports/out/ProductStockPort';
 import { PaymentPort } from '../ports/out/PaymentPort';
-import { ShipmentPort } from '../ports/out/ShipmentPort';
+import { ShipmentPort, ShipmentAddress } from '../ports/out/ShipmentPort';
 
 @Injectable()
 export class CheckoutSaga {
@@ -88,10 +88,18 @@ export class CheckoutSaga {
       quantity: i.quantity,
     }));
 
+    const address: ShipmentAddress = {
+      street: order.shippingAddress.street,
+      city: order.shippingAddress.city,
+      state: order.shippingAddress.state,
+      postalCode: order.shippingAddress.postalCode,
+      country: order.shippingAddress.country,
+    };
+
     const result = await this.shipmentPort.createShipment(
       order.id.toString(),
       items,
-      { street: order.shippingAddress.street, city: order.shippingAddress.city },
+      address,
       correlationId,
     );
 

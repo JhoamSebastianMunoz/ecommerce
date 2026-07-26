@@ -49,9 +49,13 @@ export class CheckoutController {
         {
           street: dto.shippingAddress.street,
           city: dto.shippingAddress.city,
+          state: dto.shippingAddress.state,
+          postalCode: dto.shippingAddress.postalCode,
+          country: dto.shippingAddress.country,
         },
         dto.discountAmount,
         dto.idempotencyKey,
+        dto.cartId,
       ),
     );
 
