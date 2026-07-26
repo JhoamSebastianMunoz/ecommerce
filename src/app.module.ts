@@ -9,6 +9,7 @@ import { loadConfiguration } from './config/configuration';
 import { typeOrmConfig } from './database/data-source';
 import { CatalogoModule } from './contexts/catalogo/catalogo.module';
 import { CarritoModule } from './contexts/carrito/carrito.module';
+import { PromocionesModule } from './contexts/promociones/promociones.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CarritoModule } from './contexts/carrito/carrito.module';
     TerminusModule,
     CatalogoModule,
     CarritoModule,
+    PromocionesModule,
   ],
   controllers: [HealthController],
 })
