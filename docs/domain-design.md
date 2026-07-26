@@ -7,7 +7,7 @@
 | **Catálogo** | Gestión de productos e inventario (fusionados) | Product |
 | **Carrito** | Carrito de compras temporal | Cart |
 | **Promociones** | Cupones y reglas de descuento | Promotion |
-| **Checkout** | Proceso de orden y coordinación de flujos | Order |
+| **Checkout** ✅ | Proceso de orden y coordinación de flujos | Order |
 | **Pagos** | Procesamiento de pagos (Event Sourcing) | Payment |
 | **Envíos** | Gestión de envíos y tracking | Shipment |
 | **Devoluciones** | Gestión de devoluciones (Event Sourcing) | Return |
