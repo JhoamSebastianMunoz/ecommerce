@@ -89,15 +89,15 @@ export class ShipmentResponseDto {
   @ApiProperty({ enum: ['CREATED', 'IN_TRANSIT', 'DELIVERED', 'FAILED'], example: 'CREATED' })
   status!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '2026-07-26T10:00:00.000Z' })
   createdAt!: Date;
 
-  @ApiProperty()
+  @ApiProperty({ example: '2026-07-26T10:00:00.000Z' })
   updatedAt!: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: '2026-07-26T12:00:00.000Z' })
   shippedAt?: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: '2026-07-28T15:00:00.000Z' })
   deliveredAt?: Date;
 }

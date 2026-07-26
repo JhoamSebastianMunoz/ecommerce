@@ -7,13 +7,13 @@ export class PaymentResponseDto {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   orderId!: string;
 
-  @ApiProperty({ enum: ['INITIATED', 'AUTHORIZED', 'CAPTURED', 'FAILED', 'REFUNDED'] })
+  @ApiProperty({ enum: ['INITIATED', 'AUTHORIZED', 'CAPTURED', 'FAILED', 'REFUNDED'], example: 'INITIATED' })
   status!: string;
 
   @ApiProperty({ example: 149.99 })
   amount!: number;
 
-  @ApiProperty({ enum: ['CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL', 'TRANSFER'] })
+  @ApiProperty({ enum: ['CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL', 'TRANSFER'], example: 'CREDIT_CARD' })
   paymentMethod!: string;
 
   @ApiPropertyOptional({ example: 'txn-1234567890' })

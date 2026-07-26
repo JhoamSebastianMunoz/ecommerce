@@ -80,7 +80,7 @@ export class ReturnResponseDto {
   @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   orderId!: string;
 
-  @ApiProperty({ enum: ['REQUESTED', 'APPROVED', 'REJECTED', 'RECEIVED', 'REFUND_ISSUED'] })
+  @ApiProperty({ enum: ['REQUESTED', 'APPROVED', 'REJECTED', 'RECEIVED', 'REFUND_ISSUED'], example: 'REQUESTED' })
   status!: string;
 
   @ApiProperty({ example: 'Product arrived damaged' })
