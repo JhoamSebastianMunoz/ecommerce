@@ -10,10 +10,13 @@ export const typeOrmConfig: DataSourceOptions = {
   username: config.database.username,
   password: config.database.password,
   database: config.database.database,
-  entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/migrations/*{.ts,.js}'],
   synchronize: false,
   logging: config.server.nodeEnv === 'development',
 };
 
-export const AppDataSource = new DataSource(typeOrmConfig);
+const entitiesGlob = __dirname + '/../**/**/*.entity{.ts,.js}';
+
+export const AppDataSource = new DataSource({
+  ...typeOrmConfig,
+  entities: [entitiesGlob],
+});

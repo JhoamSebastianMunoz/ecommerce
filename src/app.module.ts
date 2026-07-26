@@ -7,6 +7,7 @@ import { HealthController } from './shared-kernel/infrastructure/health/health.c
 import { CorrelationIdMiddleware } from './shared-kernel/infrastructure/middleware/correlation-id.middleware';
 import { loadConfiguration } from './config/configuration';
 import { typeOrmConfig } from './database/data-source';
+import { CatalogoModule } from './contexts/catalogo/catalogo.module';
 
 @Module({
   imports: [
@@ -18,12 +19,16 @@ import { typeOrmConfig } from './database/data-source';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [],
-      useFactory: () => typeOrmConfig,
+      useFactory: () => ({
+        ...typeOrmConfig,
+        autoLoadEntities: true,
+      }),
     }),
     EventEmitterModule.forRoot({
       wildcard: false,
     }),
     TerminusModule,
+    CatalogoModule,
   ],
   controllers: [HealthController],
 })

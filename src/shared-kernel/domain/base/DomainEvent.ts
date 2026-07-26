@@ -5,6 +5,8 @@ export interface DomainEventProps {
   aggregateId: string;
   occurredAt?: Date;
   correlationId?: string;
+  eventType: string;
+  version?: number;
 }
 
 export abstract class DomainEvent {
@@ -20,8 +22,8 @@ export abstract class DomainEvent {
     this.aggregateId = props.aggregateId;
     this.occurredAt = props.occurredAt ?? new Date();
     this.correlationId = props.correlationId;
-    this.eventType = this.constructor.name;
-    this.version = 1;
+    this.eventType = props.eventType;
+    this.version = props.version ?? 1;
   }
 
   abstract toJSON(): Record<string, unknown>;
