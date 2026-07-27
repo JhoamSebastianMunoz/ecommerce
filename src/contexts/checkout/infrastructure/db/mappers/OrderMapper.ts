@@ -49,6 +49,7 @@ export class OrderMapper {
     entity.idempotencyKey = order.idempotencyKey;
     entity.items = order.items.map((item) => {
       const itemEntity = new OrderItemEntity();
+      itemEntity.order = entity;
       itemEntity.productId = item.productId;
       itemEntity.quantity = item.quantity;
       itemEntity.unitPrice = item.unitPrice;

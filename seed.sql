@@ -64,7 +64,7 @@ ON CONFLICT (id) DO NOTHING;
 -- -----------------------------------------------------------------------------
 
 INSERT INTO shipments (id, order_id, tracking_number, street, city, state, postal_code, country, status, shipped_at) VALUES 
-('33333333-4444-5555-6666-777777777777', '99999999-8888-7777-6666-555555555555', 'TRK-2026-98765', 'Calle 100 #15-20', 'Bogotá', 'Cundinamarca', '110111', 'CO', 'IN_TRANSIT', NOW())
+('33333333-4444-5555-6666-777777777777', '99999999-8888-7777-6666-555555555555', 'TRK2026000098765', 'Calle 100 #15-20', 'Bogotá', 'Cundinamarca', '110111', 'CO', 'IN_TRANSIT', NOW())
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -83,18 +83,18 @@ INSERT INTO saga_log (id, saga_id, saga_type, step_name, status, payload, correl
 ('55555555-6666-7777-8888-999999999901', '99999999-8888-7777-6666-555555555555', 'CheckoutSaga', 'ValidateStock', 'COMPLETED', '{"status": "OK"}', 'CORR-ID-001-XYZ'),
 ('55555555-6666-7777-8888-999999999902', '99999999-8888-7777-6666-555555555555', 'CheckoutSaga', 'ReserveStock', 'COMPLETED', '{"reserved": true}', 'CORR-ID-001-XYZ'),
 ('55555555-6666-7777-8888-999999999903', '99999999-8888-7777-6666-555555555555', 'CheckoutSaga', 'ProcessPayment', 'COMPLETED', '{"paymentId": "PAY-88888"}', 'CORR-ID-001-XYZ'),
-('55555555-6666-7777-8888-999999999904', '99999999-8888-7777-6666-555555555555', 'CheckoutSaga', 'CreateShipment', 'COMPLETED', '{"trackingNumber": "TRK-2026-98765"}', 'CORR-ID-001-XYZ')
+('55555555-6666-7777-8888-999999999904', '99999999-8888-7777-6666-555555555555', 'CheckoutSaga', 'CreateShipment', 'COMPLETED', '{"trackingNumber": "TRK2026000098765"}', 'CORR-ID-001-XYZ')
 ON CONFLICT (id) DO NOTHING;
 
 -- Pattern: Event Sourcing Store (PAGOS)
 INSERT INTO payment_events (id, aggregate_id, event_type, version, payload, metadata) VALUES 
-(uuid_generate_v4(), 'PAY-88888', 'PaymentInitiatedEvent', 1, '{"paymentId": "PAY-88888", "amount": 1559.97, "method": "CREDIT_CARD"}', '{"correlationId": "CORR-ID-001-XYZ"}'),
-(uuid_generate_v4(), 'PAY-88888', 'PaymentAuthorizedEvent', 2, '{"paymentId": "PAY-88888", "authorizationCode": "AUTH-9912"}', '{"correlationId": "CORR-ID-001-XYZ"}'),
-(uuid_generate_v4(), 'PAY-88888', 'PaymentCapturedEvent', 3, '{"paymentId": "PAY-88888", "status": "SUCCESS"}', '{"correlationId": "CORR-ID-001-XYZ"}')
+(uuid_generate_v4(), 'PAY-88888', 'PaymentInitiated', 1, '{"paymentId": "PAY-88888", "amount": 1559.97, "paymentMethod": "CREDIT_CARD"}', '{"correlationId": "CORR-ID-001-XYZ"}'),
+(uuid_generate_v4(), 'PAY-88888', 'PaymentAuthorized', 2, '{"paymentId": "PAY-88888", "orderId": "99999999-8888-7777-6666-555555555555"}', '{"correlationId": "CORR-ID-001-XYZ"}'),
+(uuid_generate_v4(), 'PAY-88888', 'PaymentCaptured', 3, '{"paymentId": "PAY-88888", "orderId": "99999999-8888-7777-6666-555555555555", "transactionId": "TXN-1234567890"}', '{"correlationId": "CORR-ID-001-XYZ"}')
 ON CONFLICT (id) DO NOTHING;
 
 -- Pattern: Event Sourcing Store (DEVOLUCIONES)
 INSERT INTO return_events (id, aggregate_id, event_type, version, payload, metadata) VALUES 
-(uuid_generate_v4(), 'RET-10001', 'ReturnRequestedEvent', 1, '{"returnId": "RET-10001", "orderId": "99999999-8888-7777-6666-555555555555", "reason": "Producto defectuoso"}', '{"correlationId": "CORR-ID-RET-001"}'),
-(uuid_generate_v4(), 'RET-10001', 'ReturnApprovedEvent', 2, '{"returnId": "RET-10001", "approvedBy": "ADMIN-01"}', '{"correlationId": "CORR-ID-RET-001"}')
+(uuid_generate_v4(), 'RET-10001', 'ReturnRequested', 1, '{"returnId": "RET-10001", "orderId": "99999999-8888-7777-6666-555555555555", "reason": "Producto defectuoso", "items": [{"productId": "f47ac10b-58cc-4372-a567-0e02b2c3d479", "quantity": 1, "unitPrice": 1499.99}]}', '{"correlationId": "CORR-ID-RET-001"}'),
+(uuid_generate_v4(), 'RET-10001', 'ReturnApproved', 2, '{"returnId": "RET-10001", "orderId": "99999999-8888-7777-6666-555555555555", "refundAmount": 1499.99}', '{"correlationId": "CORR-ID-RET-001"}')
 ON CONFLICT (id) DO NOTHING;

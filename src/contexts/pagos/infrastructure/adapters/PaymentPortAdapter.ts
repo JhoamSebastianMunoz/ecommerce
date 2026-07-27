@@ -9,6 +9,7 @@ import { CreatePaymentDto } from '../../application/dtos/CreatePaymentDto';
 @Injectable()
 export class PaymentPortAdapter extends PaymentPort {
   private readonly logger = new Logger(PaymentPortAdapter.name);
+  private readonly orderPaymentMap = new Map<string, string>();
 
   constructor(
     private readonly createPaymentUseCase: CreatePaymentUseCase,
@@ -44,6 +45,8 @@ export class PaymentPortAdapter extends PaymentPort {
         correlationId,
       );
 
+      this.orderPaymentMap.set(orderId, payment.id.toString());
+
       return {
         success: true,
         transactionId: captured.transactionId?.toString() ?? `txn-${Date.now()}`,
@@ -62,7 +65,17 @@ export class PaymentPortAdapter extends PaymentPort {
     correlationId?: string,
   ): Promise<PaymentResult> {
     try {
-      this.logger.log(`Refunding payment ${transactionId}`);
+      this.logger.log(`Refunding transaction ${transactionId}`);
+
+      const paymentId = Array.from(this.orderPaymentMap.entries())
+        .find(([, pid]) => pid)![1];
+
+      if (paymentId) {
+        await this.refundPaymentUseCase.execute(paymentId, correlationId);
+      } else {
+        this.logger.warn(`No payment mapping found for transaction ${transactionId}, attempting direct refund`);
+      }
+
       return {
         success: true,
         transactionId,

@@ -7,6 +7,8 @@ import {
   IsNumber,
   IsOptional,
   Min,
+  MaxLength,
+  Length,
   ValidateNested,
   IsUUID,
   ArrayMinSize,
@@ -33,26 +35,31 @@ export class ShippingAddressRequestDto {
   @ApiProperty({ example: '123 Main St' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255)
   street!: string;
 
   @ApiProperty({ example: 'New York' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(100)
   city!: string;
 
   @ApiPropertyOptional({ example: 'NY', description: 'State or province' })
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   state?: string;
 
   @ApiProperty({ example: '10001', description: 'Postal/ZIP code' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(20)
   postalCode!: string;
 
   @ApiProperty({ example: 'US', description: 'Country code (ISO 3166-1 alpha-2)' })
   @IsString()
   @IsNotEmpty()
+  @Length(2, 2)
   country!: string;
 }
 
@@ -60,6 +67,7 @@ export class CreateOrderRequestDto {
   @ApiProperty({ example: 'customer-123' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(100)
   customerId!: string;
 
   @ApiProperty({ type: [OrderItemRequestDto] })
@@ -86,6 +94,7 @@ export class CreateOrderRequestDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   idempotencyKey?: string;
 
   @ApiPropertyOptional({

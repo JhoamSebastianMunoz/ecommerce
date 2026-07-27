@@ -36,6 +36,9 @@ export class OrderResponseDto {
   @ApiPropertyOptional({ example: 'idemp-001' })
   idempotencyKey?: string;
 
+  @ApiPropertyOptional({ example: '11111111-2222-3333-4444-555555555555', description: 'Cart ID' })
+  cartId?: string;
+
   @ApiProperty({ example: '2026-07-26T00:00:00.000Z' })
   createdAt!: string;
 

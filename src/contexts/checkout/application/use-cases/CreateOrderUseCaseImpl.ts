@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { CreateOrderUseCase } from '../ports/in/CreateOrderUseCase';
 import { OrderRepository } from '../ports/out/OrderRepository';
 import { Order } from '../../domain/aggregates/Order';
@@ -30,12 +30,20 @@ export class CreateOrderUseCaseImpl extends CreateOrderUseCase {
       }
     }
 
+    if (dto.discountAmount) {
+      const rawTotal = dto.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+      if (dto.discountAmount > rawTotal) {
+        throw new BadRequestException('Discount amount cannot exceed order total');
+      }
+    }
+
     const order = Order.create({
       customerId: dto.customerId,
       items: dto.items,
       shippingAddress: dto.shippingAddress,
       discountAmount: dto.discountAmount,
       idempotencyKey: dto.idempotencyKey,
+      cartId: dto.cartId,
     });
 
     await this.orderRepository.save(order);
@@ -63,6 +71,7 @@ export class CreateOrderUseCaseImpl extends CreateOrderUseCase {
       order.createdAt.toISOString(),
       order.updatedAt.toISOString(),
       order.idempotencyKey,
+      order.cartId,
     );
   }
 }

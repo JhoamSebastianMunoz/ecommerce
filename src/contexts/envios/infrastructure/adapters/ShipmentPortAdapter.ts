@@ -19,7 +19,10 @@ export class ShipmentPortAdapter extends ShipmentPort {
     correlationId?: string,
   ): Promise<ShipmentResult> {
     try {
-      this.logger.log(`Creating shipment for order ${orderId}`);
+      this.logger.log(`Creating shipment for order ${orderId} with ${items.length} items`);
+      if (items.length > 0) {
+        this.logger.debug(`Shipment items: ${JSON.stringify(items)}`);
+      }
 
       const trackingNumber = this.generateTrackingNumber();
 

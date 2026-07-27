@@ -27,6 +27,7 @@ export class GetOrderQueryImpl extends GetOrderQuery {
       order.createdAt.toISOString(),
       order.updatedAt.toISOString(),
       order.idempotencyKey,
+      order.cartId,
     );
   }
 }

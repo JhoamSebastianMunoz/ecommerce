@@ -68,6 +68,7 @@ export class CheckoutController {
       discountAmount: result.discountAmount,
       shippingAddress: result.shippingAddress,
       idempotencyKey: result.idempotencyKey,
+      cartId: result.cartId,
       createdAt: result.createdAt,
       updatedAt: result.updatedAt,
     };
@@ -85,10 +86,22 @@ export class CheckoutController {
   async getOrder(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<OrderHttpResponseDto> {
-    const order = await this.getOrderQuery.execute(id);
-    if (!order) {
+    const result = await this.getOrderQuery.execute(id);
+    if (!result) {
       throw new NotFoundException(`Order with id ${id} not found`);
     }
-    return order;
+    return {
+      id: result.id,
+      customerId: result.customerId,
+      status: result.status,
+      items: result.items,
+      totalAmount: result.totalAmount,
+      discountAmount: result.discountAmount,
+      shippingAddress: result.shippingAddress,
+      idempotencyKey: result.idempotencyKey,
+      cartId: result.cartId,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+    };
   }
 }

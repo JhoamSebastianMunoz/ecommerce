@@ -14,5 +14,6 @@ export class OrderResponseDto {
     public readonly createdAt: string,
     public readonly updatedAt: string,
     public readonly idempotencyKey?: string,
+    public readonly cartId?: string,
   ) {}
 }

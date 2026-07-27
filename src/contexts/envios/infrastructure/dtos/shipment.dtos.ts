@@ -4,6 +4,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsIn,
+  Length,
+  MaxLength,
 } from 'class-validator';
 
 export class CreateShipmentRequestDto {
@@ -20,26 +22,31 @@ export class CreateShipmentRequestDto {
   @ApiProperty({ example: '123 Main St', description: 'Street address' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255)
   street!: string;
 
   @ApiProperty({ example: 'New York', description: 'City' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(100)
   city!: string;
 
   @ApiPropertyOptional({ example: 'NY', description: 'State/Province' })
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   state?: string;
 
   @ApiProperty({ example: '10001', description: 'Postal code' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(20)
   postalCode!: string;
 
   @ApiProperty({ example: 'US', description: 'Country code (ISO 2-letter)' })
   @IsString()
   @IsNotEmpty()
+  @Length(2, 2)
   country!: string;
 }
 

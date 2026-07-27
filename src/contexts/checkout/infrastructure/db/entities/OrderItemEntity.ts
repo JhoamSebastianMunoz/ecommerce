@@ -12,9 +12,6 @@ export class OrderItemEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'uuid', name: 'order_id' })
-  orderId!: string;
-
   @Column({ type: 'uuid', name: 'product_id' })
   productId!: string;
 

@@ -30,12 +30,16 @@ export class ShippingAddress extends ValueObject<ShippingAddress> {
     if (!props.country?.trim()) {
       throw new Error('Country must be a non-empty string');
     }
+    const country = props.country.trim().toUpperCase();
+    if (country.length !== 2) {
+      throw new Error('Country must be a 2-letter ISO code');
+    }
     return new ShippingAddress(
       props.street.trim(),
       props.city.trim(),
       props.state?.trim(),
       props.postalCode.trim(),
-      props.country.trim().toUpperCase(),
+      country,
     );
   }
 
